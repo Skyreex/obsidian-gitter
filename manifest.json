@@ -1,0 +1,11 @@
+{
+	"id": "gitter",
+	"name": "Gitter",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Obsidian git plugin",
+	"author": "Skyreex",
+	"authorUrl": "https://obsidian.md",
+	"fundingUrl": "https://obsidian.md/pricing",
+	"isDesktopOnly": false
+}
