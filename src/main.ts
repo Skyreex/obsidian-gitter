@@ -19,6 +19,8 @@ export default class Gitter extends Plugin {
 			this.app.fileManager.vault.adapter.basePath,
 		);
 
+		console.log(this.settingsManager);
+
 		this.ribbon = new Ribbon(this.app, this);
 		this.commandsManager = new CommandsManager(this.app, this);
 		this.settingTab = new SettingTab(this.app, this);

@@ -1,3 +1,5 @@
+import { GitManager, IGitManager } from "./git-manager";
+
 export interface ISettings {
 	basePath: string;
 	isRepoInitialized: boolean;
@@ -10,6 +12,7 @@ export const DEFAULT_SETTINGS: ISettings = {
 
 export class SettingsManager {
 	private _settings: ISettings;
+	private _gitManager: IGitManager;
 
 	constructor() {
 		this._settings = { ...DEFAULT_SETTINGS };
@@ -20,6 +23,7 @@ export class SettingsManager {
 		basePath: string,
 	): Promise<SettingsManager> {
 		const instance = new SettingsManager();
+		instance._gitManager = new GitManager(basePath);
 		await instance.loadSettings(plugin, basePath);
 		return instance;
 	}
@@ -41,6 +45,12 @@ export class SettingsManager {
 		await plugin.saveData(this._settings);
 	}
 
+	async init(plugin: Gitter): Promise<void> {
+		this.isRepoInitialized = await this._gitManager.init();
+		await this.save(plugin);
+	}
+
+	//#region Getters and Setters
 	get basePath(): string {
 		return this._settings.basePath;
 	}
@@ -56,4 +66,5 @@ export class SettingsManager {
 	set isRepoInitialized(value: boolean) {
 		this._settings.isRepoInitialized = value;
 	}
+	//#endregion
 }

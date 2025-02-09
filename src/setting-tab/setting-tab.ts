@@ -1,5 +1,11 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 
+export interface ISettingTab {
+	basePath: Setting;
+	isGitInstalled: Setting;
+	isRepoInitialized: Setting;
+}
+
 export class SettingTab extends PluginSettingTab {
 	constructor(
 		protected app: App,
@@ -14,17 +20,18 @@ export class SettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		new Setting(containerEl)
-			.setName("Setting #1")
-			.setDesc("It's a secret")
-			.addText((text) =>
-				text
-					.setPlaceholder("Enter your secret")
-					.setValue(this.plugin.settingsManager.mySetting)
-					.onChange(async (value) => {
-						this.plugin.settingsManager.mySetting = value;
-						await this.plugin.settingsManager.save(this.plugin);
+		const item = new Setting(containerEl)
+			.setName("Initialise Git")
+			.addButton((button) =>
+				button
+					.setButtonText("Initialise")
+					.setClass("mod-cta")
+					.onClick(() => {
+						this.plugin.settingsManager.init(this.plugin);
 					}),
 			);
+		console.log(item);
+		console.log(this);
+		console.log(containerEl);
 	}
 }
