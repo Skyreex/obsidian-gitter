@@ -20,10 +20,10 @@ export class SettingTab extends PluginSettingTab {
 			.addText((text) =>
 				text
 					.setPlaceholder("Enter your secret")
-					.setValue(this.plugin.settings.mySetting)
+					.setValue(this.plugin.settingsManager.mySetting)
 					.onChange(async (value) => {
-						this.plugin.settings.mySetting = value;
-						await this.plugin.saveSettings();
+						this.plugin.settingsManager.mySetting = value;
+						await this.plugin.settingsManager.save(this.plugin);
 					}),
 			);
 	}

@@ -1,26 +1,44 @@
-import { App } from "obsidian";
+export interface ISettings {
+	basePath: string;
+	isRepoInitialized: boolean;
+}
 
-export class SettingsManager implements ISettings {
+export const DEFAULT_SETTINGS: ISettings = {
+	basePath: "/",
+	isRepoInitialized: false,
+};
+
+export class SettingsManager {
 	private _settings: ISettings;
 
-	constructor(
-		protected app: App,
-		protected plugin: Gitter,
-	) {
-		this.app = app;
-		this.plugin = plugin;
+	constructor() {
 		this._settings = { ...DEFAULT_SETTINGS };
 	}
 
-	async initialize() {
-		const loadedSettings = await this.plugin.loadData();
-		this._settings = { ...loadedSettings };
-
-		this.basePath = this.app.fileManager.vault.adapter.basePath;
+	static async create(
+		plugin: Gitter,
+		basePath: string,
+	): Promise<SettingsManager> {
+		const instance = new SettingsManager();
+		await instance.loadSettings(plugin, basePath);
+		return instance;
 	}
 
-	async save() {
-		await this.plugin.saveData(this._settings);
+	private async loadSettings(
+		plugin: Gitter,
+		basePath: string,
+	): Promise<void> {
+		const loadedData = await this.loadData(plugin);
+		this._settings = Object.assign({}, DEFAULT_SETTINGS, loadedData);
+		this._settings.basePath = basePath;
+	}
+
+	private async loadData(plugin: Gitter): Promise<Partial<ISettings>> {
+		return plugin.loadData() || {};
+	}
+
+	async save(plugin: Gitter): Promise<void> {
+		await plugin.saveData(this._settings);
 	}
 
 	get basePath(): string {
@@ -30,12 +48,12 @@ export class SettingsManager implements ISettings {
 	set basePath(value: string) {
 		this._settings.basePath = value;
 	}
-}
 
-export interface ISettings {
-	basePath: string;
-}
+	get isRepoInitialized(): boolean {
+		return this._settings.isRepoInitialized;
+	}
 
-export const DEFAULT_SETTINGS: ISettings = {
-	basePath: "/",
-};
+	set isRepoInitialized(value: boolean) {
+		this._settings.isRepoInitialized = value;
+	}
+}
