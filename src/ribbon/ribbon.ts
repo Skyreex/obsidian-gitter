@@ -21,25 +21,10 @@ export class Ribbon {
 	}
 
 	pushAction(evt: MouseEvent): void {
-		console.log("localStorage", localStorage);
-		const ls = spawn("pwd");
-
-		ls.stdout.on("data", (data) => {
-			console.log(`stdout: ${data}`);
-		});
-
-		ls.stderr.on("data", (data) => {
-			console.error(`stderr: ${data}`);
-		});
-
-		ls.on("close", (code) => {
-			console.log(`child process exited with code ${code}`);
-		});
-
 		new Notice("This is a push notice!");
 	}
 
 	pullAction(evt: MouseEvent): void {
-		new Notice("This is a push notice!");
+		new Notice("This is a pull notice!");
 	}
 }

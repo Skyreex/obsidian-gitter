@@ -46,6 +46,7 @@ export class SettingsManager {
 	}
 
 	async init(plugin: Gitter): Promise<void> {
+		// TODO check if repo is initialised
 		this.isRepoInitialized = await this._gitManager.init();
 		await this.save(plugin);
 	}

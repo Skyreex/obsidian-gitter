@@ -1,12 +1,12 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 
 export interface ISettingTab {
-	basePath: Setting;
-	isGitInstalled: Setting;
-	isRepoInitialized: Setting;
+	gitInit: Setting;
 }
 
-export class SettingTab extends PluginSettingTab {
+export class SettingTab extends PluginSettingTab implements ISettingTab {
+	gitInit: Setting;
+
 	constructor(
 		protected app: App,
 		protected plugin: Gitter,
@@ -20,7 +20,10 @@ export class SettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		const item = new Setting(containerEl)
+		new Setting(containerEl)
+			.setClass(
+				this.plugin.settingsManager.isRepoInitialized ? "hidden" : "",
+			)
 			.setName("Initialise Git")
 			.addButton((button) =>
 				button
@@ -30,8 +33,5 @@ export class SettingTab extends PluginSettingTab {
 						this.plugin.settingsManager.init(this.plugin);
 					}),
 			);
-		console.log(item);
-		console.log(this);
-		console.log(containerEl);
 	}
 }
